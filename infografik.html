@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tapu ve Arazi Güvenlik Rehberi 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 400px;
+        }
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0f766e; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0d5f57; 
+        }
+
+        /* Material Design Cards */
+        .material-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .material-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <!-- Chosen Palette: Fresh & Bold (Teal, Orange, Indigo) -->
+    <!-- Application Structure Plan:
+         1. Header: Impactful title with 2026 context.
+         2. Reality Check (Chart): Visualizing the strict building limits (150m2 rule).
+         3. Minimum Requirements (Chart): Bar chart showing land size requirements for permits.
+         4. Process Flow (Timeline): Visualizing the 3-step safety check (Digital, Physical, Official).
+         5. Red Flags (Grid): Common scams to avoid.
+         6. Checklist (Interactive List): Final actionable items.
+    -->
+    <!-- Visualization & Content Choices:
+         1. Building Limits -> Goal: Compare -> Grouped Bar Chart -> Compares "Dream" vs "Reality" (150m2 limit) to shock the user into awareness.
+         2. Land Sizes -> Goal: Compare -> Horizontal Bar Chart -> Shows minimum m2 needed for different land types (20k vs 5k).
+         3. Process -> Goal: Change/Process -> Vertical Timeline (HTML/Tailwind) -> Steps are sequential.
+         4. Red Flags -> Goal: Inform -> Card Grid -> Quick scanning of warning signs.
+         NO SVG used. NO Mermaid used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-teal-700 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl">🛡️</span>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-tight">Tapu Güvenlik 2026</h1>
+                    <p class="text-teal-200 text-xs md:text-sm">Dolandırıcılık Önleme ve Mevzuat Rehberi</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                <a href="#limits" class="hover:text-orange-300 transition-colors">İmar Limitleri</a>
+                <a href="#process" class="hover:text-orange-300 transition-colors">Süreç</a>
+                <a href="#redflags" class="hover:text-orange-300 transition-colors">Tuzaklar</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-12">
+
+        <!-- Introduction -->
+        <section class="text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Arazi Alırken <span class="text-orange-600">Dikkat!</span></h2>
+            <p class="text-lg text-slate-600 leading-relaxed">
+                2026 yılı itibarıyla Türkiye'de tarla, zeytinlik ve arsa alım-satım kuralları çok net çizgilerle belirlenmiştir. 
+                "Hobi bahçesi", "Tiny House" veya "İmarlı Tarla" vaatlerine kanmadan önce gerçek verileri inceleyin.
+            </p>
+        </section>
+
+        <!-- Section 1: Construction Limits (The Reality Check) -->
+        <section id="limits" class="scroll-mt-24">
+            <div class="mb-6 border-l-4 border-orange-500 pl-4">
+                <h3 class="text-2xl font-bold text-slate-800">1. Hayal vs. Gerçek: Yapılaşma İzinleri</h3>
+                <p class="text-slate-600 mt-2">
+                    Birçok alıcı "5 dönüm tarlam var, içine villa yaparım" düşüncesiyle hareket eder. Ancak 2026 mevzuatı, tarım arazilerinin korunması için çok sıkı limitler (maksimum 150m² toplam inşaat alanı) getirmektedir. Zeytinliklerde ise bu hak neredeyse hiç yoktur.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Chart 1: Limits Comparison -->
+                <div class="material-card p-6 flex flex-col">
+                    <h4 class="text-lg font-semibold text-teal-800 mb-4 text-center">Tarımsal Arazi Yapılaşma Hakkı (5.000 m² İçin)</h4>
+                    <div class="chart-container">
+                        <canvas id="buildingLimitsChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-4 text-center italic">
+                        *Zeytinliklerde konut yapılamaz. Tarla izinleri ise sadece "Tarımsal Amaçlı Yapı" (Bağ Evi) içindir.
+                    </p>
+                </div>
+
+                <!-- Contextual Info Card -->
+                <div class="material-card p-6 bg-orange-50 border border-orange-100">
+                    <h4 class="text-lg font-bold text-orange-800 mb-4"> Kritik Kurallar (2026)</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">🚫</span>
+                            <div>
+                                <strong class="block text-slate-900">Zeytinlik Yasağı</strong>
+                                <span class="text-sm text-slate-700">Tapuda "Zeytinlik" yazıyorsa konut yapılamaz. Ağaç kesmek ağır suçtur.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">🏠</span>
+                            <div>
+                                <strong class="block text-slate-900">Maksimum 150 m² Kuralı</strong>
+                                <span class="text-sm text-slate-700">Tarlanız ne kadar büyük olursa olsun (plansız alanlarda), bağ evi için toplam inşaat alanı 150 m²'yi, taban alanı 75 m²'yi geçemez.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-2xl mr-3">🚚</span>
+                            <div>
+                                <strong class="block text-slate-900">Tiny House Aldatmacası</strong>
+                                <span class="text-sm text-slate-700">Tekerlekli olması sizi kurtarmaz. Sabitlenirse, su/elektrik bağlanırsa "yapı" sayılır ve yıkılır.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Minimum Land Requirements -->
+        <section>
+            <div class="mb-6 border-l-4 border-teal-500 pl-4">
+                <h3 class="text-2xl font-bold text-slate-800">2. Bağ Evi İçin Minimum Arazi Büyüklüğü</h3>
+                <p class="text-slate-600 mt-2">
+                    Her tarlaya ev yapılmaz. Arazinin vasfına (Mutlak, Dikili, Marjinal) göre belirlenen minimum metrekare şartlarını sağlamanız gerekir. Bu şartları sağlamayan arazilere ruhsat verilmez.
+                </p>
+            </div>
+
+            <div class="material-card p-6">
+                <div class="grid md:grid-cols-3 gap-8 items-center">
+                    <div class="md:col-span-2">
+                        <h4 class="text-lg font-semibold text-teal-800 mb-4">Arazi Vasfına Göre İzin Sınırları</h4>
+                        <div class="chart-container">
+                            <canvas id="landSizeChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="md:col-span-1 bg-teal-50 p-6 rounded-lg h-full flex flex-col justify-center">
+                        <h5 class="text-teal-900 font-bold mb-3">Ek Şartlar</h5>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <span class="bg-teal-200 text-teal-800 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3 text-sm">1</span>
+                                <span class="text-sm">Kadastral yola en az <strong>25 metre</strong> cephe.</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="bg-teal-200 text-teal-800 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3 text-sm">2</span>
+                                <span class="text-sm">Arazi içinde <strong>tarımsal üretim</strong> şartı.</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="bg-teal-200 text-teal-800 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3 text-sm">3</span>
+                                <span class="text-sm">İl/İlçe Tarım Müdürlüğü <strong>uygunluk yazısı</strong>.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Safe Process Flow -->
+        <section id="process" class="scroll-mt-24">
+            <div class="mb-8 text-center">
+                <h3 class="text-2xl font-bold text-slate-800">3. Güvenli Satın Alma Süreci</h3>
+                <p class="text-slate-600 mt-2">Dolandırılmamak için izlemeniz gereken 3 kritik aşama.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Step 1 -->
+                <div class="material-card p-6 border-t-4 border-indigo-500 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">1</div>
+                    <h4 class="text-xl font-bold text-indigo-900 mt-4 mb-2 text-center">Dijital Doğrulama</h4>
+                    <p class="text-sm text-slate-600 mb-4 text-center">Fiziksel paradan önce dijital veriyi doğrulayın.</p>
+                    <hr class="border-slate-100 my-3">
+                    <ul class="text-sm space-y-2 text-slate-700">
+                        <li>📍 <strong>TKGM Parsel Sorgu:</strong> Konum doğru mu?</li>
+                        <li>💻 <strong>Web Tapu:</strong> Malik kim?</li>
+                        <li>🔒 <strong>Takyidat:</strong> Haciz, ipotek var mı?</li>
+                    </ul>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="material-card p-6 border-t-4 border-orange-500 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">2</div>
+                    <h4 class="text-xl font-bold text-orange-900 mt-4 mb-2 text-center">Resmi & Saha Kontrolü</h4>
+                    <p class="text-sm text-slate-600 mb-4 text-center">İlanlara değil, resmi evraka güvenin.</p>
+                    <hr class="border-slate-100 my-3">
+                    <ul class="text-sm space-y-2 text-slate-700">
+                        <li>🏢 <strong>Belediye:</strong> Resmi "İmar Durumu Belgesi" alın.</li>
+                        <li>🌾 <strong>Tarım İlçe Md.:</strong> "Buraya ev yapılır mı?" diye sorun.</li>
+                        <li>👀 <strong>Saha:</strong> Elektrik, su, yol var mı?</li>
+                    </ul>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="material-card p-6 border-t-4 border-teal-500 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-teal-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">3</div>
+                    <h4 class="text-xl font-bold text-teal-900 mt-4 mb-2 text-center">İşlem ve Devir</h4>
+                    <p class="text-sm text-slate-600 mb-4 text-center">Para ve imza güvenliğini sağlayın.</p>
+                    <hr class="border-slate-100 my-3">
+                    <ul class="text-sm space-y-2 text-slate-700">
+                        <li>✍️ <strong>Tapu Md.:</strong> Sadece burada imza atın.</li>
+                        <li>🏦 <strong>Banka:</strong> Ödemeyi havale ile açıklama yazarak yapın.</li>
+                        <li>📝 <strong>Sözleşme:</strong> Kaporayı noter onayı olmadan vermeyin.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Red Flags -->
+        <section id="redflags" class="scroll-mt-24">
+            <div class="bg-slate-900 rounded-xl p-8 text-white">
+                <div class="md:flex justify-between items-end mb-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-orange-400">4. Kırmızı Bayraklar 🚩</h3>
+                        <p class="text-slate-300 mt-2">Bu cümleleri duyduğunuzda arkanıza bakmadan kaçın.</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 hover:border-orange-500 transition-colors">
+                        <div class="text-3xl mb-2">🗣️</div>
+                        <h5 class="font-bold text-orange-300 mb-2">"Yakında İmar Gelecek"</h5>
+                        <p class="text-xs text-slate-400">İmar planları emlakçı sözüyle değil, meclis kararıyla değişir. Genelde yalandır.</p>
+                    </div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 hover:border-orange-500 transition-colors">
+                        <div class="text-3xl mb-2">🤝</div>
+                        <h5 class="font-bold text-orange-300 mb-2">"Hisseli Ama Yeriniz Belli"</h5>
+                        <p class="text-xs text-slate-400">Resmi ifraz yoksa yeriniz belli değildir. Şufa hakkı ile diğer ortaklar yerinizi alabilir.</p>
+                    </div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 hover:border-orange-500 transition-colors">
+                        <div class="text-3xl mb-2">🏘️</div>
+                        <h5 class="font-bold text-orange-300 mb-2">"Tiny House Bölgesi"</h5>
+                        <p class="text-xs text-slate-400">İnşaat izni olmayan tarlayı pazarlama taktiğidir. Yasal altyapısı yoktur.</p>
+                    </div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 hover:border-orange-500 transition-colors">
+                        <div class="text-3xl mb-2">⏱️</div>
+                        <h5 class="font-bold text-orange-300 mb-2">"Çok Acil / Kelepir"</h5>
+                        <p class="text-xs text-slate-400">Piyasanın çok altındaki fiyatlar genellikle hukuki sorunu (haciz, şerh) gizler.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Interactive Checklist -->
+        <section class="max-w-3xl mx-auto">
+            <h3 class="text-2xl font-bold text-slate-800 mb-6 text-center">✅ Son Kontrol Listesi</h3>
+            <div class="material-card p-6 bg-white">
+                <div class="space-y-3" id="checklist-container">
+                    <!-- Javascript will populate items -->
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <span class="text-sm text-slate-500">İlerlemek için kutucukları işaretleyin</span>
+                    <div class="text-right">
+                        <span class="text-sm font-bold text-slate-700">Tamamlanan:</span>
+                        <span id="progress-text" class="text-lg font-extrabold text-teal-600 ml-2">0/9</span>
+                    </div>
+                </div>
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-200 rounded-full h-2.5 mt-2">
+                    <div id="progress-bar" class="bg-teal-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="mb-4 text-lg font-semibold text-white">Tapu ve Arazi Rehberi 2026</p>
+            <p class="text-sm max-w-2xl mx-auto mb-8">
+                Bu infografik bilgilendirme amaçlıdır. Yatırım kararı vermeden önce mutlaka bir avukat, harita mühendisi veya şehir plancısına danışınız. Resmi kurum görüşü yerine geçmez.
+            </p>
+            <div class="text-xs text-slate-600">
+                &copy; 2026 Tüm Hakları Saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- CHART 1: Building Limits (Stacked/Grouped Bar) ---
+        // Shows the difference between User Expectation vs Legal Reality
+        const ctxLimits = document.getElementById('buildingLimitsChart').getContext('2d');
+        
+        // Label wrapping helper
+        function splitLabel(label) {
+            if (label.length > 16) {
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                    if ((currentLine + " " + words[i]).length < 16) {
+                        currentLine += " " + words[i];
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            }
+            return label;
+        }
+
+        const limitsChart = new Chart(ctxLimits, {
+            type: 'bar',
+            data: {
+                labels: ['5 Dönüm Tarla', '5 Dönüm Zeytinlik'],
+                datasets: [
+                    {
+                        label: 'Yasal Yapı Hakkı (m²)',
+                        data: [150, 0], // 150m2 for Field, 0 for Olive Grove
+                        backgroundColor: '#0F766E', // Teal-700
+                        borderRadius: 4,
+                        barPercentage: 0.6
+                    },
+                    {
+                        label: 'Kısıtlı Alan (m²)',
+                        data: [4850, 5000], // The rest of the land
+                        backgroundColor: '#E2E8F0', // Slate-200
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Yapılaşmaya Kapalı: ' + context.raw + ' m²';
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { stacked: true },
+                    y: { 
+                        stacked: true,
+                        title: { display: true, text: 'Toplam Alan (m²)' }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                return Array.isArray(label) ? label.join(' ') : label;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // --- CHART 2: Land Size Requirements (Horizontal Bar) ---
+        const ctxSizes = document.getElementById('landSizeChart').getContext('2d');
+        const sizeLabels = ['Mutlak/Marjinal Tarım', 'Dikili Tarım (Bağ/Bahçe)', 'Sera (Örtü Altı)'];
+        const processedSizeLabels = sizeLabels.map(splitLabel);
+
+        const sizesChart = new Chart(ctxSizes, {
+            type: 'bar',
+            data: {
+                labels: processedSizeLabels,
+                datasets: [{
+                    label: 'Minimum Arazi Büyüklüğü (m²)',
+                    data: [20000, 5000, 3000],
+                    backgroundColor: [
+                        '#1E40AF', // Blue-800 (Hardest)
+                        '#0F766E', // Teal-700 (Medium)
+                        '#F97316'  // Orange-500 (Easiest/Smallest)
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Horizontal Bar
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Gerekli Min. Alan (m²)' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                return Array.isArray(label) ? label.join(' ') : label;
+                            },
+                            afterBody: function(context) {
+                                return "İzin almak için tapunun bu büyüklükte olması şarttır.";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- Checklist Logic ---
+        const checklistItems = [
+            "Parsel Sorgu (TKGM) ile konum doğrulandı",
+            "Web Tapu üzerinden güncel malik kontrol edildi",
+            "Tapu takyidatları (İpotek, Haciz) sorgulandı",
+            "Belediyeden resmi 'İmar Durumu Belgesi' alındı",
+            "Tarım İlçe Müdürlüğü'nden yapı izni soruldu",
+            "Satıcı vekaletnamesi Noter'den teyit edildi",
+            "Emlakçı Yetki Belgesi kontrol edildi",
+            "Noter onaylı sözleşme olmadan kapora verilmedi",
+            "Ödeme banka yoluyla ve açıklamalı yapıldı"
+        ];
+
+        const listContainer = document.getElementById('checklist-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        
+        // Initialize List
+        checklistItems.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = "flex items-center p-3 rounded hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-200";
+            div.innerHTML = `
+                <input type="checkbox" id="check-${index}" class="w-5 h-5 text-teal-600 border-gray-300 rounded focus:ring-teal-500 cursor-pointer" onchange="updateProgress()">
+                <label for="check-${index}" class="ml-3 text-slate-700 cursor-pointer select-none flex-1">${item}</label>
+            `;
+            listContainer.appendChild(div);
+        });
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const total = checkboxes.length;
+            const percent = (checkedCount / total) * 100;
+
+            progressBar.style.width = percent + '%';
+            progressText.innerText = `${checkedCount}/${total}`;
+
+            // Visual feedback on complete
+            if (checkedCount === total) {
+                progressBar.classList.remove('bg-teal-600');
+                progressBar.classList.add('bg-green-500');
+            } else {
+                progressBar.classList.add('bg-teal-600');
+                progressBar.classList.remove('bg-green-500');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Python scripts and dependencies
+*.py
+__pycache__/
+
+# Raw data and extracted texts
+output.txt
+pdf_text.txt
+
+# Source documents (except the required PPTX)
+*.pdf
+
+# Browser recordings and agent artifacts
+*.webp
