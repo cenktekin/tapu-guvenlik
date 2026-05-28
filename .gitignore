@@ -11,3 +11,8 @@ pdf_text.txt
 
 # Browser recordings and agent artifacts
 *.webp
+
+# Environment variables
+.env
+.env.local
+.env.*.local
