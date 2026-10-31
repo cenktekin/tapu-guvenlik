@@ -1,6 +1,11 @@
-# Python scripts and dependencies
-*.py
+# Python dependencies
 __pycache__/
+
+# Local notes and agent artifacts
+NEXT_ACTIONS.md
+📄*.md
+📝*.md
+🧠*.md
 
 # Raw data and extracted texts
 output.txt
@@ -11,3 +16,8 @@ pdf_text.txt
 
 # Browser recordings and agent artifacts
 *.webp
+
+# Environment variables
+.env
+.env.local
+.env.*.local
