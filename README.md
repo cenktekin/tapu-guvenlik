@@ -35,13 +35,29 @@ Bu projeyi kendi ortamınızda çalıştırmak veya geliştirmek çok kolay! Her
 - **Vanilla JavaScript** (Modern ES6 Standartları)
 - **TailwindCSS** (CDN üzerinden, yüksek performanslı arayüz için)
 - **Chart.js** (Veri görselleştirme ve simülatörler için)
-- **Python** (Veri ayıklama ve statik site oluşturma scriptleri için geliştirme aşamasında kullanıldı)
+- **Python 3** (yalnız geliştirme/veri hattı: PDF'ten sözlük çıkarımı ve HTML'e enjeksiyon — sitenin çalışması için gerekmez)
 
 ## 📄 Proje Dosyaları
 - `index.html` - Ana uygulama dosyası.
-- `dictionary.json` - Sözlük verileri.
+- `dictionary.json` - Sözlük verileri (245 terim).
 - `infografik.html` - İlgili veri görselleştirme dökümanı.
 - `Tapu_Dolandiricilik_Korunma.pptx` - Resmi kurum sunumu.
+- `extract.py` · `parse_dict.py` - PDF → metin → `dictionary.json` veri hattı.
+- `inject.py` · `inject2.py` · `inject_dark_mode.py` - Sözlük/tooltip ve gece modu enjeksiyon scriptleri (tek seferlik; `index.html`'i yerinde günceller).
+
+## 🔁 Yeniden Üretim (Veri Hattı)
+
+Kaynak PDF (`TAPU_TERIMLERI_SOZLUK.pdf`) telif nedeniyle repoda dağıtılmaz. Elinizde varsa sözlük yeniden üretilebilir:
+
+```bash
+pip install PyPDF2
+python extract.py     # PDF → output.txt
+python parse_dict.py  # output.txt → dictionary.json
+```
+
+`inject*.py` scriptleri `index.html`'i yerinde değiştirir; çalıştırmadan önce değişikliği git ile geri alabilirsiniz (`git checkout -- index.html`).
+
+> **Not:** `dictionary.json` üzerinde sonradan elle yapılmış düzeltmeler üretim çıktısında yer almaz. `parse_dict.py` 244 terim üretir; repodaki dosyada 245 terim vardır (elle eklenen `TAPUK` ve boşluk normalizasyonları).
 
 ## 🌐 Canlı Demo (GitHub Pages)
 

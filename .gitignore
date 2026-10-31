@@ -1,6 +1,11 @@
-# Python scripts and dependencies
-*.py
+# Python dependencies
 __pycache__/
+
+# Local notes and agent artifacts
+NEXT_ACTIONS.md
+📄*.md
+📝*.md
+🧠*.md
 
 # Raw data and extracted texts
 output.txt
